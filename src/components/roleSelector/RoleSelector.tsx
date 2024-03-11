@@ -4,12 +4,15 @@ import socketUtil from "../../util/socket.util";
 import { socketConstants } from "../../constants/socketConstants";
 import { useEffect, useState } from "react";
 import { generateRandomFiveDigit } from "../../util/math.util";
+import { twMerge } from "tailwind-merge";
 
 const RoleSelector = () => {
   const navigate = useNavigate();
   const [teacherAdded, setTeacherAdded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleTeacherClick = () => {
+    setLoading(true);
     socketUtil.createSocket();
     socketUtil.getSocket()?.emit(socketConstants.createTeacher, {
       teacherId: generateRandomFiveDigit(),
@@ -20,6 +23,7 @@ const RoleSelector = () => {
   useEffect(() => {
     socketUtil.getSocket()?.on(socketConstants.connectionId, (data) => {
       if (data.id) {
+        setLoading(false);
         sessionStorage.setItem("id", data.teacherId);
         sessionStorage.setItem("role", "teacher");
         navigate(ROUTES.QUESTION_CREATOR);
@@ -34,16 +38,22 @@ const RoleSelector = () => {
       </h3>
       <div className="flex items-center gap-10 p-5">
         <span
-          className="border border-slate-500 rounded-md p-5 hover:cursor-pointer hover:bg-slate-200"
-          onClick={() => navigate(ROUTES.STUDENT_ONBOARDING)}
+          className={twMerge(
+            "border border-slate-500 rounded-md p-5 hover:cursor-pointer hover:bg-slate-200",
+            loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer"
+          )}
+          onClick={() => !loading && navigate(ROUTES.STUDENT_ONBOARDING)}
         >
           I'm a student
         </span>
         <span
-          className="border border-slate-500 rounded-md p-5 hover:cursor-pointer hover:bg-slate-200"
-          onClick={handleTeacherClick}
+          className={twMerge(
+            "border border-slate-500 rounded-md p-5 hover:cursor-pointer hover:bg-slate-200",
+            loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer"
+          )}
+          onClick={() => !loading && handleTeacherClick()}
         >
-          I'm a teacher
+          {loading ? "Logging in as teacher..." : "I'm a teacher"}
         </span>
       </div>
     </div>

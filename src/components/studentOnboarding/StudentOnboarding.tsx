@@ -5,6 +5,7 @@ import { socketConstants } from "../../constants/socketConstants";
 import socketUtil from "../../util/socket.util";
 import { ROUTES } from "../../routes/routes.constants";
 import { generateRandomFiveDigit } from "../../util/math.util";
+import { twMerge } from "tailwind-merge";
 
 const StudentOnboarding = () => {
   const { createSocket } = useSockets();
@@ -13,6 +14,7 @@ const StudentOnboarding = () => {
   const [name, setName] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [socketCreated, setSocketCreated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = () => {
     setError("");
@@ -20,6 +22,7 @@ const StudentOnboarding = () => {
       createSocket();
     }
     setSocketCreated(true);
+    setLoading(true);
     socketUtil.getSocket()?.emit(socketConstants.createStudent, {
       name,
       studentId: generateRandomFiveDigit(),
@@ -28,14 +31,15 @@ const StudentOnboarding = () => {
 
   useEffect(() => {
     if (socketCreated) {
-      console.log("socket", socketCreated);
       socketUtil.getSocket()?.on(socketConstants.connectionId, (data: any) => {
         sessionStorage.setItem("id", data?.studentId);
         sessionStorage.setItem("role", "student");
+        setLoading(false);
         navigate(ROUTES.QUESTION_ANSWER);
       });
 
       socketUtil.getSocket()?.on(socketConstants.alreadyExists, (data: any) => {
+        setLoading(false);
         setError("Student Already Exists!");
       });
     }
@@ -55,11 +59,15 @@ const StudentOnboarding = () => {
           onChange={(e) => setName(e.target.value)}
         />
         <button
-          className="border border-slate-800 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-slate-100"
+          className={twMerge(
+            "border border-slate-800 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-slate-100",
+            loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer"
+          )}
           type="submit"
           onClick={onSubmit}
+          disabled={loading}
         >
-          Continue
+          {loading ? "Loading..." : "Continue"}
         </button>
       </form>
       {error && (

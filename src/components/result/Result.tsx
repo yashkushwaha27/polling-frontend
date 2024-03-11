@@ -4,14 +4,16 @@ import socketUtil from "../../util/socket.util";
 import { socketConstants } from "../../constants/socketConstants";
 import ResultRenderer from "../resultRenderer";
 import { ROUTES } from "../../routes/routes.constants";
+import { twMerge } from "tailwind-merge";
 
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [result, setResult] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   const publishResult = () => {
-    console.log("publishing result");
+    setLoading(true);
     socketUtil.getSocket()?.emit(socketConstants.getResult, {
       id: sessionStorage.getItem("id"),
       question: location?.state?.question,
@@ -29,7 +31,7 @@ const Result = () => {
 
   useEffect(() => {
     socketUtil.getSocket()?.on(socketConstants.resultPublish, (data: any) => {
-      console.log("Data", data);
+      setLoading(false);
       if (data.status) {
         setResult(data);
       } else setResult({});
@@ -54,10 +56,13 @@ const Result = () => {
           </p>
           {sessionStorage.getItem("role") === "teacher" && (
             <button
-              className="px-3 py-2 border border-slate-500 rounded-md my-5 hover:bg-slate-500 hover:text-white"
-              onClick={publishResult}
+              className={twMerge(
+                "px-3 py-2 border border-slate-500 rounded-md my-5 hover:bg-slate-500 hover:text-white",
+                loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer"
+              )}
+              onClick={() => !loading && publishResult()}
             >
-              Publish Result
+              {loading ? "Publishing Result..." : "Publish Result"}
             </button>
           )}
         </div>

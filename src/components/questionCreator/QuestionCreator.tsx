@@ -18,7 +18,11 @@ const QuestionCreator = () => {
 
   const askQuestion = () => {
     const questionToAsk = question.question;
-    const options = question.options.map(({ value }) => value);
+    const options = question.options
+      .map(({ value }) => {
+        if (value) return value;
+      })
+      .filter((value) => value !== undefined);
     const timer = question.timer;
     const questionId = generateRandomFiveDigit();
 
