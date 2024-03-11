@@ -42,14 +42,14 @@ const QuestionAnswer = () => {
   }, [isFinished, submitted, navigate]);
 
   return (
-    <div className="flex flex-col items-start h-full w-3/4">
+    <div className="flex flex-col items-start h-full w-full lg:w-3/4">
       {question.question ? (
         <>
-          <div className="flex items-center justify-between w-full px-5 py-4">
+          <div className="flex items-start lg:items-center justify-between flex-col lg:flex-row w-full px-5 py-4">
             <p className="font-medium text-2xl">
               Select correct option and submit
             </p>
-            <span className="border border-slate-300 rounded-[50%] h-[100px] w-[100px] text-xs font-medium flex flex-col items-center justify-center text-center">
+            <span className="border border-slate-300 rounded-[50%] h-[100px] w-[100px] text-xs font-medium flex flex-col items-center justify-center text-center  mt-5 lg:mt-0">
               <p>
                 {seconds}/{question.timer}
               </p>

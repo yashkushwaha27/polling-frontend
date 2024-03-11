@@ -65,7 +65,7 @@ const StudentOnboarding = () => {
           )}
           type="submit"
           onClick={onSubmit}
-          disabled={loading}
+          disabled={loading || !name}
         >
           {loading ? "Loading..." : "Continue"}
         </button>

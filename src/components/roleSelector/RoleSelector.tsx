@@ -32,7 +32,12 @@ const RoleSelector = () => {
   }, [teacherAdded, navigate]);
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center">
+    <div
+      className={twMerge(
+        "h-full w-full flex flex-col items-center justify-center",
+        "p-5 text-center md:p-0"
+      )}
+    >
       <h3 className="text-2xl font-semibold">
         Select the role you wish to login through
       </h3>

@@ -4,6 +4,7 @@ import socketUtil from "../../util/socket.util";
 import { socketConstants } from "../../constants/socketConstants";
 import { generateRandomFiveDigit } from "../../util/math.util";
 import { ROUTES } from "../../routes/routes.constants";
+import { twMerge } from "tailwind-merge";
 
 const QuestionCreator = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const QuestionCreator = () => {
   };
 
   return (
-    <div className="flex items-start w-3/4 h-full">
+    <div className="flex items-start w-full lg:w-3/4 h-full overflow-auto">
       <div className="flex flex-col items-start px-5 py-4 w-full">
         {questionSubmitted ? (
           <>
@@ -140,8 +141,12 @@ const QuestionCreator = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex items-end justify-between w-3/4">
-              <span className="flex flex-col items-start gap-5">
+            <div
+              className={twMerge(
+                "flex flex-col md:flex-row items-start md:items-end justify-between w-full lg:w-3/4 flex-1"
+              )}
+            >
+              <span className="flex flex-col items-start md:items-start gap-5">
                 <button
                   className="px-5 py-1 mt-5 border rounded-md border-slate-500 hover:cursor-pointer hover:bg-slate-500 hover:text-white"
                   onClick={() =>
@@ -156,10 +161,10 @@ const QuestionCreator = () => {
                 >
                   Add Option +
                 </button>
-                <span className="flex items-center gap-4">
-                  <p>Timer Value : </p>
+                <span className="flex justify-center items-center gap-4 w-full flex-col lg:flex-row">
+                  <p className="w-full">Timer Value : </p>
                   <input
-                    className="px-3 py-1 rounded-md focus:outline-none"
+                    className="px-3 py-1 rounded-md focus:outline-none border"
                     type="number"
                     placeholder="Timer"
                     value={question.timer}
@@ -173,7 +178,7 @@ const QuestionCreator = () => {
                 </span>
               </span>
               <button
-                className="px-5 py-1 border rounded-md border-slate-500 hover:cursor-pointer hover:bg-slate-500 hover:text-white"
+                className="px-5 py-1 border rounded-md border-slate-500 hover:cursor-pointer hover:bg-slate-500 hover:text-white my-5 lg:my-0"
                 onClick={askQuestion}
               >
                 Ask Question

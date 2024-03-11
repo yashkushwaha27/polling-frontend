@@ -26,7 +26,11 @@ const Main = () => {
   }, [location.pathname]);
 
   return (
-    <main className={twMerge("h-full w-full flex items-stretch flex-1")}>
+    <main
+      className={twMerge(
+        "h-full w-full flex flex-col items-stretch flex-1 md:flex-row"
+      )}
+    >
       <AppRoutes />
       {sessionStorage.getItem("role") === "teacher" && (
         <div className="border-l border-slate-500 h-full px-5 py-4 flex-1 flex flex-col">
