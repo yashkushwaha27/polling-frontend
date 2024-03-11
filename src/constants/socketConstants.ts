@@ -1,5 +1,5 @@
 export const socketConstants = {
-  connectionUrl: "http://localhost:9000",
+  connectionUrl: "https://polling-backend-ts7f.onrender.com/",
   oldConnection: "old-connection",
   createStudent: "create-student",
   createTeacher: "create-teacher",
